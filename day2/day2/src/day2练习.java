@@ -16,8 +16,8 @@ public class day2练习 {
         System.out.println(c);
         char e=99;
         System.out.println(e);
-//        boolean r = true & (1/0 == 1);
-//        System.out.println(r);
+        boolean r = false && (1/0 == 1);
+        System.out.println(r);
         int x=5;
         x+=x++ +3;
         System.out.println(x);
