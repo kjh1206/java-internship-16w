@@ -1,4 +1,20 @@
-﻿out/
+# 构建产物
+out/
+target/
+build/
+bin/
+*.class
+*.jar
 
+# IDEA
 .idea/
 *.iml
+*.iws
+*.ipr
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
