@@ -5,8 +5,7 @@ class Record{
     int type;
     double count;
     String nots;
-    int i = 0;
-    static double sum = 0;
+
     Record(String data, int type, double count, String nots) {
         this.data = data;
         this.type = type;
@@ -33,34 +32,33 @@ class Record{
     @Override
     public String toString() {
         if (type == 1) {
-            return "Record{" +
-                "data='" + data + '\'' +
-                ", type=" + "收入" +
-                ", count=" + count +
-                ", nots='" + nots + '\'' +
-                '}';
+            return xuhao+" " +
+                " " + data   +
+                " " + "收入" +
+                " " + count +
+                " " + nots;
         } else {
-            return "Record{" +
-                    "data='" + data + '\'' +
-                    ", type=" + "支出" +
-                    ", count=" + count +
-                    ", nots='" + nots + '\'' +
-                    '}';
+            return xuhao+" " +
+                    " " + data  +
+                    " " + "支出" +
+                    " " + count +
+                    " " + nots;
         }
 
     }
 }
 
 public class Main2 {
-    Record[] records = new Record[100];
+    static double sum = 0;
+    static Record[] records = new Record[100];
     static Scanner scanner = new Scanner(System.in);
     static int i=0;
 
     //加入一笔记录
     static void add() {
-        String data;
-        int type;
-        double count;
+        String data=null;
+        int type=0;
+        double count=0;
         if (i == 100) {
             System.out.println("已达到最大记录数，无法添加更多记录！");
             return;
@@ -88,6 +86,7 @@ public class Main2 {
                 flag = false;
             }
         }
+
         System.out.println("请输入类型（1 收入 / 2 支出）：");
         boolean flag1 = true;
         while (flag1) {
@@ -99,6 +98,7 @@ public class Main2 {
                 flag1 = false;
             }
         }
+
         System.out.println("请输入金额：");
         boolean flag2 = true;
         while (flag2) {
@@ -110,8 +110,12 @@ public class Main2 {
                 flag2 = false;
             }
         }
+
         System.out.println("请输入备注：");
         String nots = scanner.nextLine();
+
+        records[i]=new Record(data,type,count,nots);
+        records[i].xuhao=i+1;
         i++;
         if (type == 1) {
             sum += count;
@@ -124,65 +128,11 @@ public class Main2 {
     //显示所有记录
     static void showAll() {
         for (int j = 0; j < i; j++) {
-            record[j].toString();
+            System.out.println(records[j].toString());
         }
     }
 
-    //按类型筛选
-    static void showByType(int t) {
-        if (t < 1 || t > 2) {
-            System.out.println("类型输入错误！");
-            return;
-        }
-        for (int j = 0; j < i; j++) {
-            if (type[j] == t) {
-                Record.record[j].toString();
-            }
-        }
-    }
 
-    //删除最后一笔记录
-    static void deleteLast() {
-        if (i == 0) {
-            System.out.println("没有记录可以删除！");
-            return;
-        }
-
-        i--;
-        data[i] = null;
-        nots[i] = null;
-        System.out.println("删除成功！当前共" + i + "笔");
-    }
-
-    //按金额排序
-    static void sortByCount() {
-        if (i == 0) {
-            System.out.println("没有记录可以排序！");
-            return;
-        }
-        for (int j = 0; j < i - 1; j++) {
-            for (int k = 0; k < i - 1 - j; k++) {
-                if (count[k] > count[k + 1]) {
-                    double tempCount = count[k];
-                    count[k] = count[k + 1];
-                    count[k + 1] = tempCount;
-
-                    String tempData = data[k];
-                    data[k] = data[k + 1];
-                    data[k + 1] = tempData;
-
-                    int tempType = type[k];
-                    type[k] = type[k + 1];
-                    type[k + 1] = tempType;
-
-                    String tempNots = nots[k];
-                    nots[k] = nots[k + 1];
-                    nots[k + 1] = tempNots;
-                }
-            }
-        }
-        System.out.println("按金额排序成功！");
-    }
 
     public static void main(String[] args) {
         boolean j = true;
@@ -190,11 +140,7 @@ public class Main2 {
             System.out.println("========== 记账本 v0.1 ==========\n" +
                     "1. 添加一笔\n" +
                     "2. 查看全部\n" +
-                    "3. 按类型筛选\n" +
-                    "4. 统计总结余\n" +
-                    "5. 退出\n" +
-                    "6. 删除最后一笔\n" +
-                    "7. 按金额排序\n" +
+                    "3. 退出\n" +
                     "请选择：");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 消费掉换行符
@@ -209,26 +155,8 @@ public class Main2 {
                     showAll();
                     break;
                 case 3:
-                    System.out.println("按类型筛选");
-                    int t = scanner.nextInt();
-                    scanner.nextLine(); // 消费掉换行符
-                    showByType(t);
-                    break;
-                case 4:
-                    System.out.println("统计总支出");
-                    System.out.println("总结余为：" + sum);
-                    break;
-                case 5:
                     System.out.println("退出");
                     j = false;
-                    break;
-                case 6:
-                    System.out.println("删除最后一笔");
-                    deleteLast();
-                    break;
-                case 7:
-                    System.out.println("按金额排序");
-                    sortByCount();
                     break;
                 default:
                     System.out.println("无效的选择");
