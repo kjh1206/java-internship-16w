@@ -10,18 +10,12 @@ public class 算法题2 {
 class Solution1 {
     public ListNode reverseList(ListNode head) {
         ListNode dummy=new ListNode();
-        ListNode cur=new ListNode();
-        dummy.next=head.next;
-        cur=dummy.next;
-        for(;cur.next!=null;cur=cur.next){
-            dummy.next.next=head;
-            head=dummy.next;
-            dummy.next=cur.next;
+        while(head!=null){
+            ListNode cur=head.next;
+            head.next=dummy.next;
+            dummy.next=head;
+            head=cur;
         }
-        dummy.next.next=head;
-        head=dummy.next;
-        dummy.next=cur.next;
-        dummy.next.next=head;
         return dummy.next;
     }
 }
