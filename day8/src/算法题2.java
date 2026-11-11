@@ -17,5 +17,6 @@ class Solution1 {
             head=cur;
         }
         return dummy.next;
+
     }
 }
