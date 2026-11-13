@@ -86,7 +86,7 @@ public class Main2 {
                 flag = false;
             }
         }
-
+        //改枚举
         System.out.println("请输入类型（1 收入 / 2 支出）：");
         boolean flag1 = true;
         while (flag1) {
