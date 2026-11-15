@@ -28,3 +28,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+# 运行时数据（学生记录，不入库）
+students.csv

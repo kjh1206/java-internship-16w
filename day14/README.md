@@ -5,12 +5,12 @@
 ## 运行
 
 ```bash
-# 在 day14 目录下（students.csv 会生成在当前目录）
+# 在 day14 目录下
 javac -encoding UTF-8 -d out src/*.java
 java -cp out Main
 ```
 
-IDEA 里直接跑 `Main` 即可，注意 **Working directory 要设成 `day14`**，否则 `students.csv` 会落到别处。
+IDEA 里直接跑 `Main` 即可，**不需要设置 Working directory**：数据文件路径是按 `Main.class` 的位置反推的，无论从哪个目录启动，`students.csv` 都写在 `day14` 目录下（`Main.dataFile()`）。
 
 ## 功能
 
@@ -35,7 +35,9 @@ InvalidFieldException（自定义受检异常：field + value + message）
 Main（菜单 + 输入校验，唯一持有 Scanner 的地方）
 ```
 
-## 数据格式（students.csv）
+## 数据格式（day14/students.csv）
+
+> 文件位置固定为项目根 `day14/students.csv`，与启动目录无关；已在 `.gitignore` 里排除，不会提交到仓库。
 
 ```
 学号,姓名,年龄,层次code,成绩

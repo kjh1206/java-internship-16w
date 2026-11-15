@@ -1,3 +1,4 @@
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +14,34 @@ public class Main {
     // 全局唯一的 Scanner：如果每个方法各 new 一个，第一个会把输入流里的数据读走，
     // 后面再读就会抛 NoSuchElementException 或者读到空串。
     private static final Scanner SC = new Scanner(System.in);
-    private static final StudentRepository REPO = new FileStudentRepository(Path.of("students.csv"));
+    // 数据文件固定在 day14 目录里：不管命令行在哪个目录启动、IDEA 的工作目录是什么，
+    // 都写到本项目根下，不会到处飞。
+    private static final StudentRepository REPO = new FileStudentRepository(dataFile("students.csv"));
+
+    /**
+     * 定位数据文件：从 Main.class 所在位置（编译后是 day14/out）逐层往上找，
+     * 第一个包含 src 子目录的那层就是项目根 day14。
+     *
+     * <p>为什么不用相对路径 "students.csv"：相对路径的基准是 JVM 的当前工作目录，
+     * 命令行 cd 到哪、IDEA 的 Working directory 设成什么，都会改变落盘位置。
+     * 按 class 文件位置反推项目根，就跟启动目录无关了。
+     *
+     * <p>如果取不到 class 位置（极端情况，比如被奇怪的类加载器加载），
+     * 就退化成相对路径，至少还能跑。
+     */
+    private static Path dataFile(String name) {
+        try {
+            Path p = Path.of(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            if (!Files.isDirectory(p)) p = p.getParent();   // 打包成 jar 时拿到的是 jar 文件
+            for (int i = 0; i < 6 && p != null; i++) {
+                if (Files.isDirectory(p.resolve("src"))) return p.resolve(name);
+                p = p.getParent();   // out → day14（这里能找到 src，命中）
+            }
+        } catch (Exception ignored) {
+            // URL 转换失败（极少见）：走下面的兜底
+        }
+        return Path.of(name);
+    }
 
     public static void main(String[] args) {
         while (true) {
