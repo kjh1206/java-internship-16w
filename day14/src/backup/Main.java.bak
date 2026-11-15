@@ -1,0 +1,165 @@
+import java.util.List;
+
+class AgeFormatError extends Exception {
+    private int code;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public AgeFormatError(int code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "FormatError{" +
+                "code=" + code +
+                "message" + getMessage() +
+                '}';
+    }
+}
+
+class GradeFormatError extends Exception {
+    private double code;
+
+    public double getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public GradeFormatError(double code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "FormatError{" +
+                "code=" + code +
+                "  message=" + getMessage() +
+                '}';
+    }
+}
+
+enum level {
+    UNDERGRAD(1, "本科生"), GRAD(2, "研究生 ");
+    private final int code;
+    private final String label;
+
+    level(int code, String label) {
+        this.code = code;
+        this.label = label;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public static level ofCode(int code) {
+        for (level l : values()) {
+            if (l.code == code) return l;
+        }
+        throw new IllegalArgumentException("未知的code" + code);
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
+}
+interface StudentRepository {                 // ① 接口（W2 主线之一）
+    void save(Student s);
+    Student findById(int id);
+    List<Student> findAll();
+    boolean delete(int id);
+}
+class Student  {
+    private String name;
+    private int age;
+    private int id;
+    private level type;
+    private double grade;
+
+    Student(int id, String name, int age, int type, double grade) throws AgeFormatError, GradeFormatError {
+        if (age < 1 || age > 150) throw new AgeFormatError(age, "年龄应在1~150");
+        if (grade < 0 || grade > 100) throw new GradeFormatError(grade, "成绩应在0~100");
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.type = level.ofCode(type);
+        this.grade = grade;
+    }
+
+    @Override
+    public String toString() {
+        return "student{" +
+                "name='" + name +
+                ", age=" + age +
+                ", id=" + id +
+                ", type=" + type +
+                ", grade=" + grade +
+                '}';
+    }
+
+    public level getType() {
+        return type;
+    }
+
+    public void setType(level type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) throws GradeFormatError{
+        if (grade < 0 || grade > 100) throw new GradeFormatError(grade, "成绩应在0~100");
+        this.grade = grade;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) throws AgeFormatError {
+        if (age < 1 || age > 150) throw new AgeFormatError(age, "年龄应在1~150");
+        this.age = age;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+
+    }
+}
