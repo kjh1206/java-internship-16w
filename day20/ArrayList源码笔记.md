@@ -14,6 +14,7 @@ protected transient int modCount; // 结构修改次数（定义在 AbstractList
 
 `elementData` 的长度是**容量**，`size` 是**元素个数**，二者不同步。
 所以 `get(i)` 是 `elementData[i]` 的数组下标访问，O(1)；代价是数组必须连续，中间插删要搬移。
+另外它是**非线程安全**的：多个线程同时 add 会丢数据，想并发安全要么外部加锁，要么换 `CopyOnWriteArrayList` / `Collections.synchronizedList`。
 
 ## 二、扩容机制
 
@@ -89,3 +90,11 @@ int newCapacity = oldCapacity + (oldCapacity >> 1);   // 1.5 倍，右移比除�
 - 别在 `for-each` 里 `list.remove`，用 `iterator.remove()` 或 `removeIf`；
 - 大量删除优先转 Set，用 `removeAll(Collection)` 而不是逐条删；
 - 需要线程安全且读多写极少 → `CopyOnWriteArrayList`，否则加锁或换容器。
+
+## 七、面试口述版（60 秒）
+
+> ArrayList 底层是 Object 数组，`size` 是元素个数，`elementData.length` 是容量，初始容量其实是 0，第一次 add 才扩到 10。扩容时新容量是旧容量的 1.5 倍，也就是 `old + (old >> 1)`，因为几何增长能保证均摊 O(1)，1.5 倍又比 2 倍省空间。它用一个 `modCount` 记录结构修改次数，迭代器创建时记下期望值，每次 `next()` 比对，不一致就抛 CME——注意只有 `next()` 会检查，`hasNext()` 只看 `cursor != size`，所以删倒数第二个元素时循环恰好结束，不会抛。用它的时候已知规模要预分配，删除走 `iterator.remove()` 或 `removeIf`，别在 for-each 里 `list.remove`。
+
+## 八、一句话总结
+
+> **ArrayList = 数组 + size + modCount：1.5 倍几何扩容保证均摊 O(1)，modCount 与迭代器对账提供 fail-fast 报警。**
